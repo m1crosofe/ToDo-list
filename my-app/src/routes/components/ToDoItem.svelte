@@ -1,13 +1,20 @@
 <script>
+	import { createEventDispatcher } from "svelte";
     export let id;
     export let text;
     export let isDone;
+    const dispatch = createEventDispatcher();
 </script>
 
-<div class="todo-item">
-    <input class="todo-item__check" type="checkbox">
-    <p class="todo-item__text">Some text</p>
-    <button class="todo-item__btn">Del</button>
+<div class="todo-item" class:todo-item_done={isDone}>
+    <input 
+    class="todo-item__check" 
+    type="checkbox"
+    on:change={dispatch('change', {id})}
+    checked={isDone}
+    />
+    <p class="todo-item__text">{text}</p>
+    <button class="todo-item__btn" on:click={dispatch('remove', {id})}>Del</button>
 </div>
 
 <style>
@@ -16,6 +23,7 @@
         align-items: center;
         justify-content: space-between;
         padding: 15px;
+        margin: 5px;
         background: #ffebeb;
         border-radius: 15px;
     }
@@ -26,10 +34,11 @@
         flex-grow: 1;
     }
     .todo-item_done{
-        text-decoration: line-through;
+        background: #EBFFED;
+        
     }
     .todo-item_done .todo-item__text{
-        background: #EBFFED;
+        text-decoration: line-through;
     }
     .todo-item__btn{
         border: none;
